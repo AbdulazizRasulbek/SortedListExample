@@ -74,6 +74,7 @@ class Adapter() : RecyclerView.Adapter<Adapter.VH>() {
 
         init {
             itemView.setOnLongClickListener {
+                //PopupMenu for editing and deleting item
                 val popupMenu = PopupMenu(it.context, it)
                 popupMenu.inflate(R.menu.menu)
                 popupMenu.setOnMenuItemClickListener {
@@ -87,6 +88,7 @@ class Adapter() : RecyclerView.Adapter<Adapter.VH>() {
                     }
                     true
                 }
+                popupMenu.show()
                 true
             }
         }
@@ -102,20 +104,19 @@ class Adapter() : RecyclerView.Adapter<Adapter.VH>() {
         sortedList.add(person)
     }
 
-    fun remove(person: Person) {
-        sortedList.remove(person)
-    }
-
     fun update(person: Person) {
-        val i = sortedList.indexOf(person)
-        sortedList.updateItemAt(i, person)
+        var index = 0
+        for (i in 0 until sortedList.size()) {
+            if (sortedList[i].name == person.name && sortedList[i].age == person.age) {
+                index = i
+            }
+        }
+        sortedList.updateItemAt(index, person)
 
     }
 
     fun submitList(list: List<Person>) {
-        sortedList.beginBatchedUpdates()
-        sortedList.addAll(list)
-        sortedList.endBatchedUpdates()
+        sortedList.replaceAll(list)
     }
 
 

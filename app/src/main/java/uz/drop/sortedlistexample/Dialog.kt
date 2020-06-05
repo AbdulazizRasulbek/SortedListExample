@@ -9,9 +9,9 @@ import kotlinx.android.synthetic.main.dialog.view.*
 class Dialog(context: Context, action: String) : AlertDialog(context) {
     private var person: Person? = null
     private var listener: SingleBlock? = null
+    private val view = LayoutInflater.from(context).inflate(R.layout.dialog, null, false)
 
     init {
-        val view = LayoutInflater.from(context).inflate(R.layout.dialog, null, false)
         setView(view)
         setTitle(action)
         setButton(DialogInterface.BUTTON_POSITIVE, action) { _, _ ->
@@ -27,6 +27,10 @@ class Dialog(context: Context, action: String) : AlertDialog(context) {
 
     fun setData(person: Person) {
         this.person = person
+        with(view){
+            name.setText(person.name)
+            age.setText(person.age.toString())
+        }
     }
 
     fun setOnClickListener(block: SingleBlock) {

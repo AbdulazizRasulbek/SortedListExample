@@ -14,7 +14,6 @@ class MainActivity : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
         loadList()
-        adapter.submitList(list)
         fab.setOnClickListener {
             val dialog = Dialog(this, "Add")
             dialog.setOnClickListener(adapter::insert)
@@ -32,6 +31,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun loadList() {
         list.addAll(listOf(Person("Abdulaziz", 22), Person("Ilhom", 23), Person("Akmal", 21)))
-
+        adapter.submitList(list)
     }
 }
