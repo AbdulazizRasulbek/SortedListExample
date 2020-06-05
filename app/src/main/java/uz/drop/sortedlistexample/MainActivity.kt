@@ -1,8 +1,6 @@
 package uz.drop.sortedlistexample
 
-import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,12 +14,20 @@ class MainActivity : AppCompatActivity() {
         rv.layoutManager = LinearLayoutManager(this)
         rv.adapter = adapter
         loadList()
-        val parcelableArrayListExtra = intent.getParcelableArrayListExtra<Person>("parce")
-        startActivity(Intent(this, MainActivity::class.java).putExtra("parce", list[0]))
         adapter.submitList(list)
         fab.setOnClickListener {
-            AlertDialog.Builder(this).setTitle("")
+            val dialog = Dialog(this, "Add")
+            dialog.setOnClickListener(adapter::insert)
+            dialog.show()
         }
+        adapter.setOnEditClickListener {
+            val dialog = Dialog(this, "Edit")
+            dialog.setData(it)
+            dialog.setOnClickListener(adapter::update)
+            dialog.show()
+        }
+
+
     }
 
     private fun loadList() {

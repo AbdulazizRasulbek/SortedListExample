@@ -3,6 +3,7 @@ package uz.drop.sortedlistexample
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SortedList
 import androidx.recyclerview.widget.SortedListAdapterCallback
@@ -11,6 +12,7 @@ import kotlinx.android.synthetic.main.item.*
 
 class Adapter() : RecyclerView.Adapter<Adapter.VH>() {
 
+    var editListener: SingleBlock? = null
 
     private val adapterCallback = object : SortedListAdapterCallback<Person>(this) {
         override fun areItemsTheSame(item1: Person, item2: Person): Boolean {
@@ -63,8 +65,31 @@ class Adapter() : RecyclerView.Adapter<Adapter.VH>() {
 
     override fun onBindViewHolder(holder: VH, position: Int) = holder.bind()
 
+    fun setOnEditClickListener(block: SingleBlock) {
+        editListener = block
+    }
+
     inner class VH(override val containerView: View) : RecyclerView.ViewHolder(containerView),
         LayoutContainer {
+
+        init {
+            itemView.setOnLongClickListener {
+                val popupMenu = PopupMenu(it.context, it)
+                popupMenu.inflate(R.menu.menu)
+                popupMenu.setOnMenuItemClickListener {
+                    when (it.itemId) {
+                        R.id.edit -> {
+                            editListener?.invoke(sortedList[adapterPosition])
+                        }
+                        else -> {
+                            sortedList.removeItemAt(adapterPosition)
+                        }
+                    }
+                    true
+                }
+                true
+            }
+        }
 
         fun bind() {
             val data = sortedList[adapterPosition]

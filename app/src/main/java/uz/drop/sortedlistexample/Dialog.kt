@@ -13,7 +13,8 @@ class Dialog(context: Context, action: String) : AlertDialog(context) {
     init {
         val view = LayoutInflater.from(context).inflate(R.layout.dialog, null, false)
         setView(view)
-        setButton(DialogInterface.BUTTON_POSITIVE, action) { dialog, which ->
+        setTitle(action)
+        setButton(DialogInterface.BUTTON_POSITIVE, action) { _, _ ->
             val name = view.name
             val age = view.age
             val data = person ?: Person()
@@ -21,6 +22,7 @@ class Dialog(context: Context, action: String) : AlertDialog(context) {
             data.age = age.text.toString().toInt()
             listener?.invoke(data)
         }
+        setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel") { _, _ -> }
     }
 
     fun setData(person: Person) {
